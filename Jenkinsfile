@@ -1,17 +1,14 @@
 pipeline {
-    // Run this on the dedicated agent we configured earlier
     agent { 
         label 'linux-docker' 
     }
     
     environment {
-        // GCP Registry Configuration
         REGION     = 'asia-east1'
         PROJECT_ID = 'platypus-lab01'
         REPO_NAME  = 'otel-repo'
         APP_NAME   = 'simple-febedb-app'
         
-        // Dynamically build the full registry path
         REGISTRY   = "${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}"
         IMAGE_TAG  = "${env.BUILD_NUMBER}"
         FULL_IMAGE = "${REGISTRY}/${APP_NAME}:${IMAGE_TAG}"
@@ -20,9 +17,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Uses the GitHub token we saved in Jenkins
                 git branch: 'main', 
-                    credentialsId: 'github-token', 
+                    credentialsId: 'tribagus6-github-pat', 
                     url: 'https://github.com/tribagus6/simple-febedb-app.git'
             }
         }
@@ -34,26 +30,31 @@ pipeline {
             }
         }
         
-        stage('Authenticate & Push to GAR') {
+        stage('Keyless Authenticate & Push') {
             steps {
-                // Securely inject the GCP JSON key into the workspace
-                withCredentials([file(credentialsId: 'gcp-gar-key', variable: 'GCP_KEY')]) {
-                    // Login to Artifact Registry using the JSON key
-                    sh 'cat $GCP_KEY | docker login -u _json_key --password-stdin https://${REGION}-docker.pkg.dev'
+                // The 'sh' block runs on the Jenkins Agent container.
+                // Because the container is on the VM, it can hit the internal metadata IP.
+                sh '''
+                    echo "Fetching dynamic access token from GCP Metadata Server..."
                     
-                    // Push the built image
+                    # 1. Ask the VM for a short-lived OAuth token
+                    TOKEN=$(curl -s -H "Metadata-Flavor: Google" "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token" | grep -o '"access_token":"[^"]*"' | awk -F'"' '{print $4}')
+                    
+                    # 2. Use the token to log into Artifact Registry
+                    # We use the special username 'oauth2accesstoken' for this method
+                    echo $TOKEN | docker login -u oauth2accesstoken --password-stdin https://${REGION}-docker.pkg.dev
+                    
+                    # 3. Push the image
                     echo "Pushing image to Artifact Registry..."
-                    sh "docker push ${FULL_IMAGE}"
-                }
+                    docker push ${FULL_IMAGE}
+                '''
             }
         }
     }
     
     post {
         always {
-            // Clean up the local Docker daemon to save disk space on the VM
             sh "docker rmi ${FULL_IMAGE} || true"
-            // Log out of the registry
             sh "docker logout https://${REGION}-docker.pkg.dev || true"
         }
     }

@@ -96,7 +96,7 @@ spec:
     spec:
       containers:
       - name: service-b
-        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/service-b:v3
+        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:3
         command: ["opentelemetry-instrument", "python", "service_b.py"]
         env:
         - name: OTEL_TRACES_EXPORTER
@@ -142,7 +142,7 @@ spec:
     spec:
       containers:
       - name: service-a
-        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/service-a:v3
+        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:3
         command: ["opentelemetry-instrument", "python", "service_a.py"]
         env:
         - name: OTEL_TRACES_EXPORTER

@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    send_batch_size: 100
+    timeout: 5s
+
+exporters:
+  googlecloud:
+    project: "platypus-lab01"
+    log: # <--- NEW SECTION
+      default_log_name: "opentelemetry-app-logs" # Gives your logs a destination name in GCP
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [googlecloud, debug]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [googlecloud, debug]

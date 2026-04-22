@@ -41,7 +41,7 @@ kind: Deployment
 metadata:
   name: otel-collector
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: otel-collector

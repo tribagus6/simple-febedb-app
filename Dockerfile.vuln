@@ -1,0 +1,6 @@
+# Dockerfile.vuln
+FROM node:10.24.1-buster-slim
+
+WORKDIR /app
+
+CMD ["echo", "This image is naturally full of CVEs!"]

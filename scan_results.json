@@ -1,0 +1,13 @@
+{
+  "done": true,
+  "metadata": {
+    "@type": "type.googleapis.com/google.cloud.ondemandscanning.v1.AnalyzePackagesMetadata",
+    "createTime": "2026-04-22T07:28:47.922765Z",
+    "resourceUri": "otel-manual-test:v1"
+  },
+  "name": "projects/platypus-lab01/locations/us/operations/506c9bef-18fc-4911-bf18-7b33262583f8",
+  "response": {
+    "@type": "type.googleapis.com/google.cloud.ondemandscanning.v1.AnalyzePackagesResponse",
+    "scan": "projects/platypus-lab01/locations/us/scans/cd88998b-8c82-4f61-9a6c-aa9e8d3b64b5"
+  }
+}

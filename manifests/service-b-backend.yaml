@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-b
+spec:
+  selector:
+    matchLabels:
+      app: service-b
+  template:
+    metadata:
+      labels:
+        app: service-b
+    spec:
+      volumes:
+      - name: otel-agent-volume
+        emptyDir: {}
+      initContainers:
+      - name: otel-agent-attach
+        image: otel/opentelemetry-python-instrumentation:latest
+        command: ["cp", "-r", "/opt/opentelemetry/.", "/otel-share/"]
+        volumeMounts:
+        - name: otel-agent-volume
+          mountPath: /otel-share
+      containers:
+      - name: service-b
+        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            export PYTHONPATH=$PYTHONPATH:/otel-share/lib/python3.11/site-packages;
+            opentelemetry-instrument python service_b.py
+        env:
+        - name: OTEL_TRACES_EXPORTER
+          value: "otlp"
+        - name: OTEL_LOGS_EXPORTER
+          value: "otlp"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://otel-collector:4317"
+        - name: OTEL_SERVICE_NAME
+          value: "service-b-backend"
+        volumeMounts:
+        - name: otel-agent-volume
+          mountPath: /otel-share
+        ports:
+        - containerPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-b
+spec:
+  selector:
+    app: service-b
+  ports:
+  - port: 5002
+    targetPort: 5002

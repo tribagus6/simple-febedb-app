@@ -1,0 +1,13 @@
+{
+  "done": true,
+  "metadata": {
+    "@type": "type.googleapis.com/google.cloud.ondemandscanning.v1.AnalyzePackagesMetadata",
+    "createTime": "2026-04-22T07:35:55.549861Z",
+    "resourceUri": "bad-image:v1"
+  },
+  "name": "projects/platypus-lab01/locations/us/operations/28d0ec0c-15ca-4d51-906f-06f029688a84",
+  "response": {
+    "@type": "type.googleapis.com/google.cloud.ondemandscanning.v1.AnalyzePackagesResponse",
+    "scan": "projects/platypus-lab01/locations/us/scans/e2075a26-6a8d-43d5-a231-8820e3dbf97d"
+  }
+}

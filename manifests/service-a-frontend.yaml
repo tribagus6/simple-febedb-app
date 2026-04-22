@@ -23,7 +23,7 @@ spec:
           mountPath: /otel-share
       containers:
       - name: service-a
-        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:10
+        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:22
         command: ["/bin/sh", "-c"]
         args:
           - |

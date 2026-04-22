@@ -27,12 +27,9 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            # 1. Set the Python Path to find the OTel libraries
-            export PYTHONPATH=$PYTHONPATH:/otel-share/python;
-
-            # 2. Use the ABSOLUTE path to the instrument binary
-            # In the GHCR image, it is located in /otel-share/bin/
-            /otel-share/bin/opentelemetry-instrument python service_a.py
+            export PYTHONPATH=$PYTHONPATH:/otel-share;
+            export PATH=$PATH:/otel-share/bin;
+            /otel-share/bin/opentelemetry-instrument python service_b.py
         env:
         - name: OTEL_TRACES_EXPORTER
           value: "otlp"

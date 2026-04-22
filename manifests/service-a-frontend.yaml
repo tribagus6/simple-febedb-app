@@ -24,13 +24,12 @@ spec:
       containers:
       - name: service-a
         image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:10
-        command: ["sleep"]
-        args: ["3600"]
-        #command: ["/bin/sh", "-c"]
-        #args:
-        #  - |
-        #    export PYTHONPATH=$PYTHONPATH:/otel-share/python;
-        #    /otel-share/bin/opentelemetry-instrument python service_a.py
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            export PYTHONPATH=$PYTHONPATH:/otel-share;
+            export PATH=$PATH:/otel-share/bin;
+            /otel-share/bin/opentelemetry-instrument python service_a.py
         env:
         - name: OTEL_TRACES_EXPORTER
           value: "otlp"

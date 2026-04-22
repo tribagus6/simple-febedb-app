@@ -48,9 +48,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a-lb
+  name: service-a
 spec:
-  type: NodePort
+  type: ClusterIp
   selector:
     app: service-a
   ports:

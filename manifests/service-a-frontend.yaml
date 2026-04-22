@@ -39,8 +39,12 @@ spec:
           value: "none"
         - name: OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED
           value: "true"
+        # Explicitly force HTTP protocol to fix the previous gRPC crash
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "http/protobuf"
+        # Updated to point to the HTTP port (4318) instead of gRPC (4317)
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://otel-collector:4317"
+          value: "http://otel-collector:4318"
         - name: OTEL_SERVICE_NAME
           value: "service-a-frontend"
         volumeMounts:

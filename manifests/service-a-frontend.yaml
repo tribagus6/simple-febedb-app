@@ -24,8 +24,10 @@ spec:
       containers:
       - name: service-a
         image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:10
-        command: ["/bin/sh", "-c"]
-        args:
+        command: ["sleep"]
+        args: ["3600"]
+        #command: ["/bin/sh", "-c"]
+        #args:
           - |
             # 1. Set the Python Path to find the OTel libraries
             export PYTHONPATH=$PYTHONPATH:/otel-share/python;

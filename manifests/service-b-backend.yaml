@@ -16,14 +16,14 @@ spec:
         emptyDir: {}
       initContainers:
       - name: otel-agent-attach
-        image: otel/opentelemetry-python-instrumentation:latest
-        command: ["cp", "-r", "/opt/opentelemetry/.", "/otel-share/"]
+        image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest 
+        command: ["cp", "-r", "/autoinstrumentation/.", "/otel-share/"]
         volumeMounts:
         - name: otel-agent-volume
           mountPath: /otel-share
       containers:
       - name: service-b
-        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:latest
+        image: asia-east1-docker.pkg.dev/platypus-lab01/otel-repo/simple-febedb-app:10
         command: ["/bin/sh", "-c"]
         args:
           - |

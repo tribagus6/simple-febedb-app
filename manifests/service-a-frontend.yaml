@@ -54,5 +54,5 @@ spec:
   selector:
     app: service-a
   ports:
-  - port: 80
+  - port: 5001
     targetPort: 5001

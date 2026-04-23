@@ -17,7 +17,7 @@ spec:
       initContainers:
       - name: otel-agent-attach
         image: ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-python:latest 
-        command: ["cp", "-r", "/autoinstrumentation/.", "/otel-share/"]
+        command: ["cp", "-a", "/autoinstrumentation/.", "/otel-share/"]
         volumeMounts:
         - name: otel-agent-volume
           mountPath: /otel-share
@@ -29,7 +29,7 @@ spec:
           - |
             export PYTHONPATH=$PYTHONPATH:/otel-share;
             export PATH=$PATH:/otel-share/bin;
-            /otel-share/bin/opentelemetry-instrument python service_b.py
+            opentelemetry-instrument python service_b.py
         env:
         - name: OTEL_TRACES_EXPORTER
           value: "otlp"

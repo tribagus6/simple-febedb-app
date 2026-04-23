@@ -7,8 +7,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Bootstrap OpenTelemetry instrumentation packages
-
 COPY . .
 
 # The actual start command will be injected via the Kubernetes Deployment args
